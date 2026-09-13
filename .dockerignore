@@ -1,0 +1,10 @@
+.git
+.github
+notes
+demo
+bin
+.gocache*
+*.env
+.env
+node_modules
+__pycache__

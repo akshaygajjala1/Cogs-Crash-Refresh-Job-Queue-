@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lease recovery simulator</title>
+<style>
+:root{--ink:#17212b;--muted:#667481;--paper:#f5f7f8;--card:#fff;--line:#dbe2e7;--blue:#2563eb;--blue-soft:#e9f0ff;--green:#16845b;--green-soft:#e6f6ef;--amber:#b66a00;--amber-soft:#fff3da;--red:#c2413d;--red-soft:#fdebea;--shadow:0 18px 45px #21304012}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,input{font:inherit}button{cursor:pointer}.wrap{max-width:1120px;margin:auto;padding:38px 24px 54px}.eyebrow{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin:0 0 9px}.top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}.top h1{font-size:clamp(30px,4vw,48px);letter-spacing:-.045em;line-height:1.04;margin:0 0 12px}.lede{color:var(--muted);max-width:650px;margin:0}.notice{display:inline-flex;align-items:center;gap:8px;border:1px solid #e9c876;background:#fffaf0;color:#76510a;border-radius:999px;padding:8px 12px;font-weight:700;font-size:12px;white-space:nowrap}.notice:before{content:"";width:7px;height:7px;border-radius:50%;background:#dc9b18}.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);margin-top:28px}.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:17px 20px;border-bottom:1px solid var(--line)}.primary,.ghost,.danger{border-radius:9px;padding:9px 14px;font-weight:750;border:1px solid transparent}.primary{background:var(--blue);color:#fff}.ghost{background:#fff;color:var(--ink);border-color:var(--line)}.danger{background:#fff;color:var(--red);border-color:#efc8c6}.primary:hover{background:#1e4fc1}.ghost:hover,.danger:hover{background:#f7f9fa}.toolbar .spacer{flex:1}.control{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}.control label{font-weight:650}.control output{color:var(--ink);font-weight:800;min-width:38px}.control input{accent-color:var(--blue);width:110px}.status{margin-left:auto;color:var(--muted);font-size:13px}.status b{color:var(--ink)}.dashboard{display:grid;grid-template-columns:1.15fr .85fr;gap:0}.queue,.workers{padding:22px 20px}.queue{border-right:1px solid var(--line)}.section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:13px}.section-head h2{font-size:15px;margin:0}.section-head span{font-size:12px;color:var(--muted)}.jobs{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}.job{aspect-ratio:1;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--muted);position:relative;transition:.2s}.job.pending{background:#f9fafb}.job.leased{background:var(--amber-soft);border-color:#efcc88;color:var(--amber)}.job.complete{background:var(--green-soft);border-color:#addfc9;color:var(--green)}.job.dead{background:var(--red-soft);border-color:#efbdb9;color:var(--red)}.job.leased:after{content:"";position:absolute;inset:-3px;border:2px solid #dfa335;border-radius:12px;opacity:.45;animation:pulse 1.3s infinite}@keyframes pulse{50%{opacity:.05;transform:scale(1.05)}}.legend{display:flex;gap:15px;flex-wrap:wrap;margin-top:18px;color:var(--muted);font-size:12px}.legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;border:1px solid var(--line);vertical-align:0}.legend .l{background:var(--amber-soft);border-color:#efcc88}.legend .c{background:var(--green-soft);border-color:#addfc9}.legend .d{background:var(--red-soft);border-color:#efbdb9}.worker{border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:11px}.worker-head{display:flex;justify-content:space-between;align-items:center}.worker-name{font-weight:800}.pill{font-size:11px;font-weight:800;border-radius:999px;padding:3px 8px;background:var(--green-soft);color:var(--green)}.pill.off{background:var(--red-soft);color:var(--red)}.worker p{font-size:12px;color:var(--muted);margin:8px 0 0}.worker .bar{height:5px;background:#edf0f2;border-radius:4px;margin-top:11px;overflow:hidden}.bar span{display:block;height:100%;background:var(--amber);border-radius:4px;width:0;transition:width .2s}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border-top:1px solid var(--line);background:var(--line);border-radius:0 0 18px 18px;overflow:hidden}.metric{background:#fff;padding:17px 20px}.metric strong{display:block;font-size:25px;letter-spacing:-.03em}.metric small{color:var(--muted);font-size:12px}.lower{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.explain,.events{background:#fff;border:1px solid var(--line);border-radius:15px;padding:19px}.explain h2,.events h2{font-size:14px;margin:0 0 12px}.steps{display:grid;gap:10px}.step{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start}.step b{display:grid;place-items:center;background:var(--blue-soft);color:var(--blue);border-radius:50%;width:25px;height:25px;font-size:12px}.step p{margin:2px 0 0;color:var(--muted);font-size:13px}.step p strong{color:var(--ink)}.events ol{list-style:none;padding:0;margin:0;display:grid;gap:8px;min-height:130px}.events li{font:12px ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--muted);display:flex;gap:10px}.events time{color:#a0aab2;min-width:44px}.events li strong{color:var(--ink);font-weight:650}.footer{margin-top:24px;color:var(--muted);font-size:12px}.sr{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:760px){.wrap{padding:26px 15px 40px}.top{display:block}.notice{margin-top:18px}.dashboard,.lower{grid-template-columns:1fr}.queue{border-right:0;border-bottom:1px solid var(--line)}.jobs{grid-template-columns:repeat(6,1fr)}.metrics{grid-template-columns:repeat(2,1fr)}.status{width:100%;margin-left:0}.toolbar{gap:12px}}
+</style>
+<style>@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top"><div><p class="eyebrow">Cogs · queue mechanics</p><h1>When a worker disappears,<br>the job stays.</h1><p class="lede">A small, deterministic simulation of leases, deadlines, and requeue. Kill a worker mid-job and watch its work return to the queue when the lease expires.</p></div><div class="notice" aria-label="Simulation only">Simulation — not a live benchmark</div></div>
+  <section class="panel" aria-label="Lease simulation">
+    <div class="toolbar"><button class="primary" id="start" type="button">Start simulation</button><button class="ghost" id="pause" type="button" disabled>Pause</button><button class="ghost" id="reset" type="button">Reset</button><span class="spacer"></span><div class="control"><label for="lease">Lease</label><input id="lease" type="range" min="2" max="8" value="4"><output id="leaseOut">4s</output></div><div class="control"><label for="batch">Batch</label><input id="batch" type="range" min="1" max="3" value="2"><output id="batchOut">2 jobs</output></div><span class="status" aria-live="polite">Virtual time <b id="clock">0.0s</b></span></div>
+    <div class="dashboard"><div class="queue"><div class="section-head"><h2>Queue</h2><span id="queueLabel">18 jobs · ready to claim</span></div><div class="jobs" id="jobs" aria-label="Job states"></div><div class="legend"><span><i></i>Pending</span><span><i class="l"></i>Leased</span><span><i class="c"></i>Complete</span></div></div><div class="workers"><div class="section-head"><h2>Workers</h2><span>claim → work → ack</span></div><div class="worker" id="worker0"><div class="worker-head"><span class="worker-name">worker-a</span><span class="pill" id="pill0">online</span></div><p id="work0">Waiting for a lease</p><div class="bar"><span id="bar0"></span></div><button class="danger" id="kill0" type="button" style="margin-top:11px;padding:6px 10px;font-size:12px">Kill worker-a</button></div><div class="worker" id="worker1"><div class="worker-head"><span class="worker-name">worker-b</span><span class="pill" id="pill1">online</span></div><p id="work1">Waiting for a lease</p><div class="bar"><span id="bar1"></span></div></div></div></div>
+    <div class="metrics"><div class="metric"><strong id="mPending">18</strong><small>pending now</small></div><div class="metric"><strong id="mLeased">0</strong><small>leased now</small></div><div class="metric"><strong id="mDone">0</strong><small>acknowledged</small></div><div class="metric"><strong id="mRequeued">0</strong><small>requeued after expiry</small></div></div>
+  </section>
+  <div class="lower"><section class="explain"><h2>What the lease protects</h2><div class="steps"><div class="step"><b>1</b><p><strong>Claim.</strong> A worker takes a job with a deadline.</p></div><div class="step"><b>2</b><p><strong>Crash.</strong> The worker stops before it can acknowledge.</p></div><div class="step"><b>3</b><p><strong>Reap.</strong> The expired lease makes the job pending again.</p></div><div class="step"><b>4</b><p><strong>Finish.</strong> Another worker claims it and acknowledges it.</p></div></div></section><section class="events"><h2>Event log <span style="color:#a0aab2;font-weight:500">· latest first</span></h2><ol id="events" aria-live="polite"></ol></section></div>
+  <p class="footer">Every number above comes from this simulation’s events. It is a teaching model, not a measurement of production performance.</p>
+</main>
+<script>
+(() => {
+  const total = 18;
+  const jobsEl = document.getElementById('jobs');
+  const eventsEl = document.getElementById('events');
+  const state = { t: 0, running: false, requeued: 0, done: 0, jobs: [], workers: [] };
+  let timer;
+  const $ = id => document.getElementById(id);
+
+  function reset() {
+    clearInterval(timer);
+    state.t = 0; state.running = false; state.requeued = 0; state.done = 0;
+    state.jobs = Array.from({ length: total }, (_, i) => ({
+      id: i + 1, status: 'pending', worker: null, progress: 0, deadline: 0,
+      duration: 1.7 + (i % 4) * 0.25
+    }));
+    state.workers = [{ name: 'worker-a', online: true, job: null }, { name: 'worker-b', online: true, job: null }];
+    $('start').disabled = false; $('pause').disabled = true; $('pause').textContent = 'Pause';
+    eventsEl.innerHTML = ''; log('Ready — 18 jobs are pending'); render();
+  }
+
+  function log(message) {
+    const item = document.createElement('li');
+    item.innerHTML = '<time>' + state.t.toFixed(1) + 's</time><strong>' + message + '</strong>';
+    eventsEl.prepend(item);
+    while (eventsEl.children.length > 8) eventsEl.lastElementChild.remove();
+  }
+
+  function claim(worker) {
+    if (!worker.online || worker.job) return;
+    const ids = state.jobs.filter(job => job.status === 'pending').slice(0, +$('batch').value);
+    if (!ids.length) return;
+    worker.job = ids;
+    ids.forEach(job => { job.status = 'leased'; job.worker = worker.name; job.progress = 0; job.deadline = state.t + +$('lease').value; });
+    log(worker.name + ' claimed ' + ids.map(job => 'job-' + job.id).join(', '));
+  }
+
+  function tick() {
+    state.t += 0.25;
+    state.workers.forEach(worker => {
+      if (worker.online && !worker.job) claim(worker);
+      if (!worker.job) return;
+      if (worker.online) worker.job.forEach(job => { job.progress += 0.25; job.deadline = state.t + +$('lease').value; });
+      const lost = worker.job.filter(job => job.deadline <= state.t);
+      if (lost.length) {
+        lost.forEach(job => { job.status = 'pending'; job.worker = null; job.progress = 0; job.deadline = 0; });
+        state.requeued += lost.length;
+        log(lost.length + ' job' + (lost.length > 1 ? 's' : '') + ' requeued — lease expired');
+        worker.job = worker.job.filter(job => !lost.includes(job));
+      }
+      if (worker.online && worker.job && worker.job.length && worker.job.every(job => job.progress >= job.duration)) {
+        worker.job.forEach(job => { job.status = 'complete'; job.worker = null; });
+        state.done += worker.job.length;
+        log(worker.name + ' acknowledged ' + worker.job.length + ' job' + (worker.job.length > 1 ? 's' : ''));
+        worker.job = null;
+      }
+      if (worker.job && !worker.job.length) worker.job = null;
+    });
+    if (state.done === total) { state.running = false; clearInterval(timer); $('pause').disabled = true; log('Queue drained — all jobs acknowledged'); }
+    render();
+  }
+
+  function render() {
+    jobsEl.innerHTML = '';
+    state.jobs.forEach(job => { const item = document.createElement('div'); item.className = 'job ' + job.status; item.textContent = 'J' + job.id; item.title = 'Job ' + job.id + ': ' + job.status; item.setAttribute('aria-label', 'Job ' + job.id + ', ' + job.status); jobsEl.append(item); });
+    const pending = state.jobs.filter(job => job.status === 'pending').length;
+    const leased = state.jobs.filter(job => job.status === 'leased').length;
+    $('mPending').textContent = pending; $('mLeased').textContent = leased; $('mDone').textContent = state.done; $('mRequeued').textContent = state.requeued;
+    $('queueLabel').textContent = pending + ' jobs · ' + (pending ? 'ready to claim' : 'empty'); $('clock').textContent = state.t.toFixed(1) + 's';
+    state.workers.forEach((worker, i) => {
+      const jobs = worker.job || [];
+      $('pill' + i).textContent = worker.online ? 'online' : 'killed'; $('pill' + i).className = 'pill' + (worker.online ? '' : ' off');
+      $('work' + i).textContent = !worker.online ? (jobs.length ? 'Stopped — lease expires in ' + Math.max(0, Math.min(...jobs.map(job => job.deadline - state.t))).toFixed(1) + 's' : 'No active lease') : jobs.length ? jobs.length + ' job' + (jobs.length > 1 ? 's' : '') + ' in progress · lease ' + Math.max(0, Math.min(...jobs.map(job => job.deadline - state.t))).toFixed(1) + 's left' : 'Waiting for a lease';
+      $('bar' + i).style.width = jobs.length ? Math.min(100, Math.max(...jobs.map(job => job.progress)) / Math.max(...jobs.map(job => job.duration)) * 100) + '%' : '0%';
+    });
+  }
+
+  $('start').onclick = () => { state.running = true; $('start').disabled = true; $('pause').disabled = false; log('Simulation started'); timer = setInterval(tick, 250); };
+  $('pause').onclick = () => { state.running = !state.running; $('pause').textContent = state.running ? 'Pause' : 'Resume'; if (state.running) timer = setInterval(tick, 250); else clearInterval(timer); };
+  $('reset').onclick = reset;
+  $('kill0').onclick = () => { const worker = state.workers[0]; if (!worker.online) return; worker.online = false; log('worker-a killed — ' + (worker.job ? worker.job.length + ' leased job' + (worker.job.length > 1 ? 's' : '') + ' at risk' : 'no active lease')); render(); };
+  $('lease').oninput = () => { $('leaseOut').textContent = $('lease').value + 's'; render(); };
+  $('batch').oninput = () => { $('batchOut').textContent = $('batch').value + ' job' + (+$('batch').value > 1 ? 's' : ''); };
+  reset();
+})();
+</script>
+</body>
+</html>

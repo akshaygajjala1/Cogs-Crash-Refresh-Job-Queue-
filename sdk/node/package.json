@@ -1,0 +1,11 @@
+{
+  "name": "@cogs/client",
+  "version": "0.1.0",
+  "description": "Worker SDK for Cogs — background jobs and cron for self-hosted apps",
+  "type": "module",
+  "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {}
+}

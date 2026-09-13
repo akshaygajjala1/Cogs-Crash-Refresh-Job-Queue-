@@ -1,0 +1,25 @@
+# Private working notes -- interview prep, raw benchmark output.
+# Not secret, just not the repo's business.
+notes/
+
+# Build artifacts
+.gocache*/
+bin/
+/cogs
+/cogs.exe
+
+# Environment / secrets
+*.env
+.env
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+
+# Language artifacts
+__pycache__/
+*.pyc
+node_modules/
